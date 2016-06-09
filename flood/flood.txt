@@ -1,0 +1,11 @@
+"gamemode"
+{
+    "title"     "Flood"
+    "maps"      "^fm_"
+    "base"      "base"
+    "menusystem"	"1"
+
+    "author_name"   "Mythikos"
+    "author_email"  "n/a"
+    "author_url"    "www.mythicservers.com"
+}
