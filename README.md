@@ -1,7 +1,7 @@
 # Flood-2.0
 
 Credits:  
-1) [MS] Mythic - for development of serverside and clientside code.  
+1) [MS] Mythic (Mythikos) - for development of serverside and clientside code.  
 2) Freezebug - for development of serverside code.   
 3) Nebual - for the development of NADMOD and permission to use it in our gamemode.  
 
@@ -19,3 +19,6 @@ flood_participation_cash - Amount of cash given to a player every 5 seconds of b
 flood_bonus_cash - Amount of cash given to the winner of a round (def: 300)  
 flood_wh_enabled - Does the water hurt players - 1=true 2=false (def: 1)  
 flood_wh_damage - How much damage a player takes per cycle (def: 1)  
+
+
+Workshop: http://steamcommunity.com/sharedfiles/filedetails/?id=474900236  
