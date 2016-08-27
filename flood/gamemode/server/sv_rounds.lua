@@ -1,3 +1,13 @@
+local function PlayerIsFriend(ply, ply2)
+	if not IsValid(ply) or not IsValid(ply2) then return end
+
+	for k, v in pairs(ply:CPPIGetFriends()) do
+		if v == ply2 then return true end 
+	end
+
+	return false 
+end
+
 function GM:GetActivePlayers()
 	local players = { }
 	for _, v in pairs(player.GetAll()) do
@@ -11,16 +21,33 @@ end
 
 function GM:CheckForWinner()
 	if self:GetGameState() == 3 then
-		local count = 0
-		local winner = nil
-		for _, v in pairs(self:GetActivePlayers()) do
-			if v:Alive() and IsValid(v) then
-				count = count + 1
-				winner = v
+		local players = self:GetActivePlayers()
+		local count = #players
+		if count == 1 then winner = players[1] end
+
+		-- Determine team conditions
+		local AllAreFriends = true
+		for k, ply in pairs(players) do
+			for x, ply2 in pairs(players) do
+				-- Dont look at the same person
+				if ply == ply2 then continue end
+
+				-- Is player one friends with player two, and is player two friends with player one?
+				if PlayerIsFriend(ply, ply2) and PlayerIsFriend(ply2, ply) then
+					continue
+				else
+					AllAreFriends = false
+					break
+				end
 			end
 		end
 
-		if count == 1 and winner != nil then
+		-- Determine if we have winners
+		if AllAreFriends == true and #players != 0 then
+			self:DeclareWinner(0, players)
+			self:SetGameState(4)
+			self:LowerAllWaterControllers()
+		elseif count == 1 and winner != nil then
 			self:DeclareWinner(1, winner)
 			self:SetGameState(4)
 			self:LowerAllWaterControllers()
@@ -33,7 +60,20 @@ function GM:CheckForWinner()
 end
 
 function GM:DeclareWinner(case, ply)
-	if case == 1 and IsValid(ply) then
+	if case == 0 and type(ply) == "table" then
+		for _, v in pairs(ply) do
+			if IsValid(v) and v:Alive() and self:GetGameState() == 3 then
+				local cash = GetConVar("flood_bonus_cash"):GetInt()
+				v:AddCash(cash)
+
+				local ct = ChatText()
+				ct:AddText("[Flood] ", Color(132, 199, 29, 255))
+				ct:AddText(v:Nick(), self:FormatColor(v:GetPlayerColor()))
+				ct:AddText(" won and recieved an additional $"..cash.."!")
+				ct:SendAll()
+			end
+		end
+	elseif case == 1 and IsValid(ply) then
 		if ply:Alive() and IsValid(ply) and self:GetGameState() == 3 then
 			local cash = GetConVar("flood_bonus_cash"):GetInt()
 			ply:AddCash(cash)
