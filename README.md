@@ -22,3 +22,7 @@ flood_wh_damage - How much damage a player takes per cycle (def: 1)
 
 
 Workshop: http://steamcommunity.com/sharedfiles/filedetails/?id=474900236  
+
+
+Projects to use flood:
+  https://github.com/WTC-GhostCommunity/The-Purge-Gamemode
